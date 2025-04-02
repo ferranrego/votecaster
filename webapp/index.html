@@ -49,5 +49,41 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     <script defer data-domain="farcaster.vote" src="https://plausible.io/js/script.js"></script>
-  </body>
+ <!-- Farcaster Mini App Integration -->
+  <script type="module">
+    // Import the Farcaster Frame SDK using a CDN
+    import { sdk } from 'https://esm.sh/@farcaster/frame-sdk';
+
+    // Function to automatically sign in the user with Farcaster
+    async function autoSignIn() {
+      // NOTE: For production, generate a secure random nonce on your server.
+      const nonce = 'secureNonce1234'; // Must be at least 8 alphanumeric characters
+      try {
+        const signInResult = await sdk.actions.signIn({ nonce });
+        console.log('User signed in successfully:', signInResult);
+      } catch (error) {
+        console.error('Sign in error:', error);
+      }
+    }
+
+    // Function to dismiss the Farcaster splash screen
+    async function dismissSplashScreen() {
+      try {
+        await sdk.actions.ready();
+        console.log('Splash screen dismissed – app is ready!');
+      } catch (error) {
+        console.error('Error dismissing splash screen:', error);
+      }
+    }
+
+    // Initialize the Farcaster integration
+    async function initFarcasterIntegration() {
+      await autoSignIn();
+      await dismissSplashScreen();
+    }
+
+    // Run the integration as soon as the page loads
+    initFarcasterIntegration();
+  </script> 
+ </body>
 </html>
